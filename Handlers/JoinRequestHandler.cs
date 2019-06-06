@@ -6,9 +6,7 @@ using BombinoBomberBot.Helpers;
 using BombinoBomberBot.Model;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using Telegram.Bot;
 
 namespace BombinoBomberBot.Handlers
 {
@@ -17,8 +15,6 @@ namespace BombinoBomberBot.Handlers
     {
         private readonly BomberBotContext _context;
         private readonly ResponseLocalizer _response;
-        private readonly TelegramBotClient _telegram;
-        private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly ILogger<IRequest> _logger;
 
         public JoinRequestHandler(BomberBotContext context, ResponseLocalizer response, ILogger<IRequest> logger)
