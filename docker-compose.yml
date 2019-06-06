@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  bombinobomberbot:
+    image: ${DOCKER_REGISTRY-}bombinobomberbot
+    build:
+      context: .
+      dockerfile: Dockerfile
+  
+  postgres: 
+    image: postgres
+    restart: always
+    environment:
+      "POSTGRES_PASSWORD": "password"
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  portainer:
+    image: portainer/portainer
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - portainer:/data
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  
+volumes:
+  portainer: null
+  postgres: null
+
