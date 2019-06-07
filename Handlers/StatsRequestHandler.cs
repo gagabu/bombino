@@ -59,10 +59,10 @@ namespace BombinoBomberBot.Handlers
                 for (int i = 0; i < userStats.Count; i++)
                 {
                     var userStat = userStats[i];
-                    var rate = userStat.Wins / (double)room.Trolls * 100;
+                    var rate = userStat.Wins / (double)room.Trolls;
                     sb.Append(i + 1).Append(". ").Append(userStat.User.Mention())
                       .Append(" - ").Append(userStat.Wins)
-                      .Append(" (").Append(rate).Append("%)").AppendLine();
+                      .Append(" (").Append(rate.ToString("P")).Append(")").AppendLine();
                 }
 
                 await _response.SendAsync(message.Chat.Id, "StatsInfo", sb.ToString(), userStats.First().User.Mention());

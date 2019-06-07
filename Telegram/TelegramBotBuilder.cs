@@ -16,6 +16,7 @@ namespace BombinoBomberBot.Telegram
         public TelegramBotBuilder WithPolling()
         {
             _applicationBuilder.ApplicationServices.GetService<TelegramBotPolling>().Start();
+            _applicationBuilder.ApplicationServices.GetService<TelegramBotClient>().DeleteWebhookAsync().Wait();
             return this;
         }
 
