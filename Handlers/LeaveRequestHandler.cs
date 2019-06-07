@@ -30,7 +30,7 @@ namespace BombinoBomberBot.Handlers
 
             if (room == null)
             {
-                _logger.LogWarning("User {Username}:{UserId} tries to leave game from unknown chat:{ChatId}", message.From.Username, message.From.Id, message.Chat.Id);
+                _logger.LogWarning("User {User} tries to leave game from unknown chat:{ChatId}", message.From, message.Chat.Id);
                 return;
             }
 
@@ -40,17 +40,17 @@ namespace BombinoBomberBot.Handlers
 
             if (user == null)
             {
-                _logger.LogWarning("User {Username}:{UserId} tries to leave in chat:{ChatId}, but it doesn't play game", message.From.Username, message.From.Id, message.Chat.Id);
+                _logger.LogWarning("User {User} tries to leave in chat:{ChatId}, but it doesn't play game", message.From, message.Chat.Id);
 
-                await _response.SendAsync(message.Chat.Id, "UserLeftFailed", message.From.Username);
+                await _response.SendAsync(message.Chat.Id, "UserLeftFailed", message.From.Id);
             }
             else
             {
                 room.Users.Remove(user);
                 await _context.SaveChangesAsync(cancellationToken);
-                _logger.LogInformation("User {Username}:{UserId} left the game in chat:{ChatId}", message.From.Username, message.From.Id, message.Chat.Id);
+                _logger.LogInformation("User {User} left the game in chat:{ChatId}", message.From, message.Chat.Id);
                 
-                await _response.SendAsync(message.Chat.Id, "UserLeftGame", message.From.Username);
+                await _response.SendAsync(message.Chat.Id, "UserLeftGame", message.From.Id);
             }
         }
     }

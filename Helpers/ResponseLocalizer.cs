@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 
 namespace BombinoBomberBot.Helpers
 {
@@ -18,7 +19,7 @@ namespace BombinoBomberBot.Helpers
         public Task SendAsync(long chatId, string key, params object[] args)
         {   
             var response = _localizer[key, args];
-            return _telegram.SendTextMessageAsync(chatId, response.ToString());
+            return _telegram.SendTextMessageAsync(chatId, response.ToString(), ParseMode.Markdown);
 
         }
     }

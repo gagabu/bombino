@@ -2,6 +2,9 @@
 using Serilog;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Serilog.Events;
+using Serilog.Sinks.GoogleCloudLogging;
 
 namespace BombinoBomberBot
 {
@@ -20,8 +23,16 @@ namespace BombinoBomberBot
                                {
                                    c.MinimumLevel.Debug()
                                     .Enrich.FromLogContext()
-                                    .WriteTo.Console()
-                                    .WriteTo.File("messages.log");
+                                    .WriteTo.Console(LogEventLevel.Error);
+                                   
+                                   if (b.HostingEnvironment.IsProduction())
+                                   {
+                                       c.WriteTo.GoogleCloudLogging(new GoogleCloudLoggingSinkOptions
+                                                                        {
+                                                                                ProjectId = b.Configuration.GetValue<string>("GoogleProjectId"),
+                                                                                UseJsonOutput = true
+                                                                        });
+                                   }
                                })
                    .ConfigureServices(s => s.AddAutofac());
     }

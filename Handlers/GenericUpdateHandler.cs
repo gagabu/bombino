@@ -15,9 +15,12 @@ namespace BombinoBomberBot.Handlers
 
         protected override async Task Handle(GenericUpdateRequest request, CancellationToken cancellationToken)
         {
-            // TODO: support full command name
+            // TODO: support full command name with bot name
             switch (request.Message.Text)
             {
+                case string m when m.StartsWith("/help"):
+                    await _mediator.Send(new HelpRequest(request.Message), cancellationToken);
+                    break;
                 case string m when m.StartsWith("/join"):
                     await _mediator.Send(new JoinRequest(request.Message), cancellationToken);
                     break;

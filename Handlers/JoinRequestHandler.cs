@@ -38,8 +38,7 @@ namespace BombinoBomberBot.Handlers
                            };
                 
                 _context.Rooms.Add(room);
-                _logger.LogInformation("Room:{RoomId} was created by user {Username}:{TelegramUserId})",
-                                       message.Chat.Id, message.From.Username, message.From.Id);
+                _logger.LogInformation("Chat:{ChatId} was created by user {User})", message.Chat.Id, message.From);
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(x => x.TelegramUserId == message.From.Id,
@@ -63,8 +62,7 @@ namespace BombinoBomberBot.Handlers
                                        User = user
                                    });
                 
-                _logger.LogInformation("User {Username}:{UserId} has been created and joined to game in chat:{ChatId}", message.From.Username,
-                                       message.From.Id, room.TelegramChatId);
+                _logger.LogInformation("User {User} has been created and joined to game in chat:{ChatId}", message.From, room.TelegramChatId);
 
                 await _context.SaveChangesAsync(cancellationToken);
                 return;
@@ -82,15 +80,15 @@ namespace BombinoBomberBot.Handlers
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                _logger.LogInformation("User {Username}:{UserId} joined to play in chat:{ChatId}", message.From.Username, message.From.Id, message.Chat.Id);
+                _logger.LogInformation("User {User} joined to play in chat:{ChatId}", message.From, message.Chat.Id);
 
-                await _response.SendAsync(message.Chat.Id, "UserJoined", user.Username);
+                await _response.SendAsync(message.Chat.Id, "UserJoined", user.TelegramUserId);
             }
             else
             {
-                _logger.LogWarning("User {Username}:{UserId} has already been joined to play in chat:{ChatId}", message.From.Username, message.From.Id, message.Chat.Id);
+                _logger.LogWarning("User {User} has already been joined to play in chat:{ChatId}", message.From, message.Chat.Id);
                 
-                await _response.SendAsync(message.Chat.Id, "UserAlreadyJoined", user.Username);
+                await _response.SendAsync(message.Chat.Id, "UserAlreadyJoined", user.TelegramUserId);
             }
         }
     }

@@ -31,7 +31,7 @@ namespace BombinoBomberBot.Handlers
 
             if (room == null)
             {
-                _logger.LogWarning("User {Username}:{UserId} tries to play game in unknown chat:{ChatId}", message.From.Username, message.From.Id, message.Chat.Id);
+                _logger.LogWarning("User {User} tries to play game in unknown chat:{ChatId}", message.From, message.Chat.Id);
                 return;
             }
 
@@ -41,16 +41,16 @@ namespace BombinoBomberBot.Handlers
 
             if (user == null)
             {
-                _logger.LogWarning("User {Username}:{UserId} tries to play game in chat:{ChatId}, but it doesn't play game", message.From.Username, message.From.Id, message.Chat.Id);
-                await _response.SendAsync(message.Chat.Id, "UserCantTroll", message.From.Username);
+                _logger.LogWarning("User {User} tries to play game in chat:{ChatId}, but it doesn't play game", message.From, message.Chat.Id);
+                await _response.SendAsync(message.Chat.Id, "UserCantTroll", message.From.Id);
             }
             else
             {
                 var rnd = new Random();
                 var winnerIndex = rnd.Next(0, room.Users.Count);
                 var winner = await _context.Users.FirstOrDefaultAsync(x => x.Id == room.Users[winnerIndex].UserId, cancellationToken);
-                _logger.LogWarning("User {Username}:{UserId} wins game in chat:{ChatId}", winner.Username, winner.TelegramUserId, message.Chat.Id);
-                await _response.SendAsync(message.Chat.Id, "UserWinGame", winner.Username);
+                _logger.LogWarning("User {User} wins game in chat:{ChatId}", winner.Username, winner.TelegramUserId, message.Chat.Id);
+                await _response.SendAsync(message.Chat.Id, "UserWinGame", winner.TelegramUserId);
             }
         }
     }
