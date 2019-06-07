@@ -27,7 +27,7 @@ namespace BombinoBomberBot.Handlers
         protected override async Task Handle(JoinRequest request, CancellationToken cancellationToken)
         {
             var message = request.Message;
-            var room = await _context.Rooms.Include(x => x.Users).FirstOrDefaultAsync(x => x.TelegramChatId == message.Chat.Id, cancellationToken);
+            var room = await _context.Rooms.FirstOrDefaultAsync(x => x.TelegramChatId == message.Chat.Id, cancellationToken);
 
             if (room == null)
             {
@@ -38,6 +38,7 @@ namespace BombinoBomberBot.Handlers
                            };
                 
                 _context.Rooms.Add(room);
+                await _context.SaveChangesAsync(cancellationToken);
                 _logger.LogInformation("Chat:{ChatId} was created by user {User})", message.Chat.Id, message.From);
             }
 
@@ -55,40 +56,34 @@ namespace BombinoBomberBot.Handlers
                            };
 
                 _context.Users.Add(user);
-
-                room.Users.Add(new RoomUser
-                                   {
-                                       Room = room,
-                                       User = user
-                                   });
-                
-                _logger.LogInformation("User {User} has been created and joined to game in chat:{ChatId}", message.From, room.TelegramChatId);
-
                 await _context.SaveChangesAsync(cancellationToken);
-                return;
+
+                _logger.LogInformation("User {User} has been created and joined to game in chat:{ChatId}", message.From, room.TelegramChatId);
             }
 
-            if (room.Users.All(x => x.User.TelegramUserId != message.From.Id))
+            var roomUser = await _context.RoomUsers
+                            .FirstOrDefaultAsync(x => x.User.TelegramUserId == message.From.Id && x.Room.TelegramChatId == message.Chat.Id, cancellationToken);
+
+            if (roomUser == null)
             {
-                var roomUser = new RoomUser
+                roomUser = new RoomUser
                                    {
                                        Room = room,
                                        User = user
                                    };
                 
                 _context.RoomUsers.Add(roomUser);
-
                 await _context.SaveChangesAsync(cancellationToken);
 
                 _logger.LogInformation("User {User} joined to play in chat:{ChatId}", message.From, message.Chat.Id);
 
-                await _response.SendAsync(message.Chat.Id, "UserJoined", user.TelegramUserId);
+                await _response.SendAsync(message.Chat.Id, "UserJoined", message.From.Mention());
             }
             else
             {
                 _logger.LogWarning("User {User} has already been joined to play in chat:{ChatId}", message.From, message.Chat.Id);
                 
-                await _response.SendAsync(message.Chat.Id, "UserAlreadyJoined", user.TelegramUserId);
+                await _response.SendAsync(message.Chat.Id, "UserAlreadyJoined", message.From.Mention());
             }
         }
     }

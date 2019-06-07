@@ -21,22 +21,24 @@ namespace BombinoBomberBot.Model
             
             builder.Entity<User>().HasIndex(x => x.TelegramUserId).IsUnique();
             builder.Entity<User>().HasMany(x => x.Rooms);
+            builder.Entity<User>().HasMany(x => x.UserStats);
 
-            builder.Entity<RoomUser>()
-                   .HasKey(ru => new { ru.RoomId, ru.UserId});
-
+            builder.Entity<RoomUser>().HasKey(x => new { x.RoomId, x.UserId });
             builder.Entity<RoomUser>().HasIndex(x => x.RoomId);
             builder.Entity<RoomUser>().HasIndex(x => x.UserId);
-
             builder.Entity<RoomUser>()
                    .HasOne(cm => cm.Room)
                    .WithMany(c => c.Users)
                    .HasForeignKey(m => m.RoomId);
-
             builder.Entity<RoomUser>()
                    .HasOne(cm => cm.User)
                    .WithMany(m => m.Rooms)
                    .HasForeignKey(c => c.UserId);
+
+            builder.Entity<UserStats>().HasKey(x => new { x.RoomId, x.UserId });
+            builder.Entity<UserStats>().HasIndex(x => x.RoomId);
+            builder.Entity<UserStats>().HasOne(x => x.Room);
+            builder.Entity<UserStats>().HasOne(x => x.User).WithMany(x => x.UserStats);
         }
 
         public DbSet<Room> Rooms { get; set; }
@@ -44,6 +46,8 @@ namespace BombinoBomberBot.Model
         public DbSet<User> Users { get; set; }
 
         public DbSet<RoomUser> RoomUsers { get; set; }
+
+        public DbSet<UserStats> UserStats { get; set; }
     }
 
     public class Room
@@ -59,7 +63,22 @@ namespace BombinoBomberBot.Model
 
         public IList<RoomUser> Users { get; set; }
 
+        public int Trolls { get; set; }
+
         public string Title { get; set; }
+    }
+    
+    public class UserStats
+    {
+        public int RoomId { get; set; }
+
+        public Room Room { get; set; }
+
+        public int UserId { get; set; }
+
+        public User User { get; set; }
+
+        public int Wins { get; set; }
     }
 
     public class User
@@ -67,6 +86,7 @@ namespace BombinoBomberBot.Model
         public User()
         {
             Rooms = new List<RoomUser>();
+            UserStats = new List<UserStats>();
         }
 
         public int Id { get; set; }
@@ -74,6 +94,8 @@ namespace BombinoBomberBot.Model
         public int TelegramUserId { get; set; }
 
         public IList<RoomUser> Rooms { get; set; }
+
+        public IList<UserStats> UserStats { get; set; }
 
         public string Username { get; set; }
 

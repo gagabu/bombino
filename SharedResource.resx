@@ -117,33 +117,45 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmptyRoomStats" xml:space="preserve">
+    <value>Таксс... что тут у нас. А у нас тут еще никто не играел. А ну бегом /join и потом /troll и пусть весь мир узнает, кто пидор!</value>
+  </data>
   <data name="HelloInfo" xml:space="preserve">
-    <value>Привет [inline mention of a user](tg://user?id={0}). Давай посмотрим, что я знаю о тебе:</value>
+    <value>Привет {0}. Давай посмотрим, что я знаю о тебе:</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Все очень просто:
-/join - принять участие
-/leave - покинуть игру
-/troll - определить победителя
-/info - показать информацию о себе
-/help - вывести эту справку</value>
+/join - Принять участие
+/leave - Выйти из игры
+/troll - Запустить рулетку
+/stats - Показать статистику
+/info - Узнать информацию о себе
+/help - Показать справку</value>
+  </data>
+  <data name="StatsInfo" xml:space="preserve">
+    <value>Кто же у нас тут в лидерах?
+
+{0}
+
+Почетный пидор - {1}.
+С чем нас всех и поздравляю.</value>
   </data>
   <data name="UserAlreadyJoined" xml:space="preserve">
-    <value>Пффф... Эй, [inline mention of a user](tg://user?id={0}), не горячись или тебе не терпится стать пидором?</value>
+    <value>Пффф... Эй, {0}, не горячись или тебе не терпится стать пидором?</value>
   </data>
   <data name="UserCantTroll" xml:space="preserve">
-    <value>[inline mention of a user](tg://user?id={0}) сначала встань в очередь /join, а потом уже крути барабан!</value>
+    <value>{0} сначала встань в очередь /join, а потом уже крути барабан!</value>
   </data>
   <data name="UserJoined" xml:space="preserve">
-    <value>Поприветствуем [inline mention of a user](tg://user?id={0}), как официального кандидата в пидоры.</value>
+    <value>Поприветствуем {0}, как официального кандидата в пидоры.</value>
   </data>
   <data name="UserLeftFailed" xml:space="preserve">
-    <value>Пидор [inline mention of a user](tg://user?id={0}) хочет свалить, но он даже не принимал участие.</value>
+    <value>Пидор {0} хочет свалить, но он даже не принимал участие.</value>
   </data>
   <data name="UserLeftGame" xml:space="preserve">
-    <value>[inline mention of a user](tg://user?id={0}), уходя уходи, щенок.</value>
+    <value>Ну и проваливай {0}, щенок.</value>
   </data>
   <data name="UserWinGame" xml:space="preserve">
-    <value>На этот раз пидором назначен [inline mention of a user](tg://user?id={0}). Как тебе, пидор?</value>
+    <value>На этот раз пидором назначен {0}. Как тебе, пидор?</value>
   </data>
 </root>

@@ -27,7 +27,7 @@ namespace BombinoBomberBot.Handlers
             var message = request.Message;
             _logger.LogInformation("Help request from {User}", message.From);
 
-            await _response.SendAsync(message.Chat.Id, "Help", message.From.Id);
+            await _response.SendAsync(message.Chat.Id, "Help");
         }
     }
 }

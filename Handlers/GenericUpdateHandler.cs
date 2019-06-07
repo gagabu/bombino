@@ -27,6 +27,9 @@ namespace BombinoBomberBot.Handlers
                     case string m when m.StartsWith("/help"):
                         await _mediator.Send(new HelpRequest(request.Message), cancellationToken);
                         break;
+                    case string m when m.StartsWith("/stats"):
+                        await _mediator.Send(new StatsRequest(request.Message), cancellationToken);
+                        break;
                     case string m when m.StartsWith("/join"):
                         await _mediator.Send(new JoinRequest(request.Message), cancellationToken);
                         break;

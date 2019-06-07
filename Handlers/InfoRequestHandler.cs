@@ -29,7 +29,7 @@ namespace BombinoBomberBot.Handlers
             var message = request.Message;
             _logger.LogInformation("Info request from {User}", message.From);
 
-            await _response.SendAsync(message.Chat.Id, "HelloInfo", message.From.Id);
+            await _response.SendAsync(message.Chat.Id, "HelloInfo", message.From.Mention());
 
             var info = "``` " + JsonConvert.SerializeObject(message, Formatting.Indented) + " ```";
 

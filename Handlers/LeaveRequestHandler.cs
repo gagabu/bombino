@@ -42,7 +42,7 @@ namespace BombinoBomberBot.Handlers
             {
                 _logger.LogWarning("User {User} tries to leave in chat:{ChatId}, but it doesn't play game", message.From, message.Chat.Id);
 
-                await _response.SendAsync(message.Chat.Id, "UserLeftFailed", message.From.Id);
+                await _response.SendAsync(message.Chat.Id, "UserLeftFailed", message.From.Mention());
             }
             else
             {
@@ -50,7 +50,7 @@ namespace BombinoBomberBot.Handlers
                 await _context.SaveChangesAsync(cancellationToken);
                 _logger.LogInformation("User {User} left the game in chat:{ChatId}", message.From, message.Chat.Id);
                 
-                await _response.SendAsync(message.Chat.Id, "UserLeftGame", message.From.Id);
+                await _response.SendAsync(message.Chat.Id, "UserLeftGame", message.From.Mention());
             }
         }
     }
