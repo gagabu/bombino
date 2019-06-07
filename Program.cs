@@ -23,16 +23,19 @@ namespace BombinoBomberBot
                                {
                                    c.MinimumLevel.Debug()
                                     .Enrich.FromLogContext()
-                                    .WriteTo.Console(LogEventLevel.Error);
+                                    .WriteTo.Console(LogEventLevel.Debug);
                                    
                                    if (b.HostingEnvironment.IsProduction())
                                    {
+                                       c.WriteTo.Console(LogEventLevel.Error);
                                        c.WriteTo.GoogleCloudLogging(new GoogleCloudLoggingSinkOptions
                                                                         {
                                                                                 ProjectId = b.Configuration.GetValue<string>("GoogleProjectId"),
                                                                                 UseJsonOutput = true
                                                                         });
                                    }
+
+                                   c.ReadFrom.Configuration(b.Configuration);
                                })
                    .ConfigureServices(s => s.AddAutofac());
     }
