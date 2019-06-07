@@ -27,7 +27,7 @@ namespace BombinoBomberBot.Handlers
         protected override async Task Handle(JoinRequest request, CancellationToken cancellationToken)
         {
             var message = request.Message;
-            var room = await _context.Rooms.FirstOrDefaultAsync(x => x.TelegramChatId == message.Chat.Id, cancellationToken);
+            var room = await _context.Rooms.Include(x => x.Users).FirstOrDefaultAsync(x => x.TelegramChatId == message.Chat.Id, cancellationToken);
 
             if (room == null)
             {

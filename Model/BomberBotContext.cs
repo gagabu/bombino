@@ -22,7 +22,6 @@ namespace BombinoBomberBot.Model
             builder.Entity<User>().HasIndex(x => x.TelegramUserId).IsUnique();
             builder.Entity<User>().HasMany(x => x.Rooms);
 
-
             builder.Entity<RoomUser>()
                    .HasKey(ru => new { ru.RoomId, ru.UserId});
 
