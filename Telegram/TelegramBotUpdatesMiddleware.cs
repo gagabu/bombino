@@ -1,10 +1,12 @@
-﻿using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BombinoBomberBot.Handlers;
 using MediatR;
+using Newtonsoft;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace BombinoBomberBot.Telegram
 {
@@ -23,7 +25,10 @@ namespace BombinoBomberBot.Telegram
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var update = await JsonSerializer.DeserializeAsync<Update>(context.Request.Body);
+            var reader = new StreamReader(context.Request.Body);
+            var raw = await reader.ReadToEndAsync();            
+            var update = JsonConvert.DeserializeObject<Update>(raw);
+            
             if (update != null)
             {
                 await _mediator.Send(new GenericUpdateRequest(update.Message));
