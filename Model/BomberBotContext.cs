@@ -15,7 +15,7 @@ namespace BombinoBomberBot.Model
         {
             base.OnModelCreating(builder);
 
-            builder.ForNpgsqlUseIdentityAlwaysColumns();
+            builder.UseIdentityAlwaysColumns();
             builder.Entity<Room>().HasIndex(x => x.TelegramChatId).IsUnique();
             builder.Entity<Room>().HasMany(x => x.Users);
             
