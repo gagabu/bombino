@@ -156,6 +156,6 @@
     <value>Ну и проваливай {0}, щенок.</value>
   </data>
   <data name="UserWinGame" xml:space="preserve">
-    <value>На этот раз пидором назначен {0}. Как тебе, пидор?</value>
+    <value>На этот раз пидором назначен {0}. Но мы то знаем, что главный пидар - это {1}</value>
   </data>
 </root>

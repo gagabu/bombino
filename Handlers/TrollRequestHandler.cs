@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BombinoBomberBot.Helpers;
@@ -66,8 +67,10 @@ namespace BombinoBomberBot.Handlers
                 userStats.Wins++;
                 
                 await _context.SaveChangesAsync(cancellationToken);
+                var topUser = await _context.UserStats.Include(x => x.User).Where(x => x.RoomId == room.Id).OrderByDescending(x => x.Wins).FirstAsync();
+
                 var member = await _telegram.GetChatMemberAsync(message.Chat.Id, winner.TelegramUserId, cancellationToken);
-                await _response.SendAsync(message.Chat.Id, "UserWinGame", member.User.Mention());
+                await _response.SendAsync(message.Chat.Id, "UserWinGame", member.User.Mention(), topUser.User.Mention());
             }
         }
     }
