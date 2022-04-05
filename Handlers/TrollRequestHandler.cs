@@ -53,7 +53,7 @@ namespace BombinoBomberBot.Handlers
                 var rnd = new Random();
                 var winnerIndex = rnd.Next(0, room.Users.Count);
                 var winner = await _context.Users.FirstOrDefaultAsync(x => x.Id == room.Users[winnerIndex].UserId, cancellationToken);
-                _logger.LogWarning("User {User} wins game in chat:{ChatId}", winner.Username, winner.TelegramUserId, message.Chat.Id);
+                _logger.LogWarning("User <{UserName}{User}> wins game in chat:{ChatId}", winner.Username, winner.TelegramUserId, message.Chat.Id);
 
                 var userStats = await _context.UserStats.FirstOrDefaultAsync(x => x.RoomId == room.Id && x.UserId == winner.Id, cancellationToken);
 

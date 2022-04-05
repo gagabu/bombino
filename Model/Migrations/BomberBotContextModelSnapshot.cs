@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace BombinoBomberBot.Model.Migrations
 {
     [DbContext(typeof(BomberBotContext))]
@@ -14,20 +16,27 @@ namespace BombinoBomberBot.Model.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn)
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityAlwaysColumns(modelBuilder);
 
             modelBuilder.Entity("BombinoBomberBot.Model.Room", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<long>("TelegramChatId");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Title");
+                    b.Property<long>("TelegramChatId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("Trolls");
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Trolls")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -39,9 +48,11 @@ namespace BombinoBomberBot.Model.Migrations
 
             modelBuilder.Entity("BombinoBomberBot.Model.RoomUser", b =>
                 {
-                    b.Property<int>("RoomId");
+                    b.Property<int>("RoomId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("RoomId", "UserId");
 
@@ -55,15 +66,22 @@ namespace BombinoBomberBot.Model.Migrations
             modelBuilder.Entity("BombinoBomberBot.Model.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<string>("FirstName");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
 
-                    b.Property<int>("TelegramUserId");
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Username");
+                    b.Property<long>("TelegramUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -75,11 +93,14 @@ namespace BombinoBomberBot.Model.Migrations
 
             modelBuilder.Entity("BombinoBomberBot.Model.UserStats", b =>
                 {
-                    b.Property<int>("RoomId");
+                    b.Property<int>("RoomId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("Wins");
+                    b.Property<int>("Wins")
+                        .HasColumnType("integer");
 
                     b.HasKey("RoomId", "UserId");
 
@@ -95,12 +116,18 @@ namespace BombinoBomberBot.Model.Migrations
                     b.HasOne("BombinoBomberBot.Model.Room", "Room")
                         .WithMany("Users")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BombinoBomberBot.Model.User", "User")
                         .WithMany("Rooms")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BombinoBomberBot.Model.UserStats", b =>
@@ -108,12 +135,30 @@ namespace BombinoBomberBot.Model.Migrations
                     b.HasOne("BombinoBomberBot.Model.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BombinoBomberBot.Model.User", "User")
                         .WithMany("UserStats")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BombinoBomberBot.Model.Room", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("BombinoBomberBot.Model.User", b =>
+                {
+                    b.Navigation("Rooms");
+
+                    b.Navigation("UserStats");
                 });
 #pragma warning restore 612, 618
         }

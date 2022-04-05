@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using BombinoBomberBot.Handlers;
-using Google.Apis.Logging;
+﻿using BombinoBomberBot.Handlers;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Telegram.Bot.Types;
 
@@ -18,7 +11,8 @@ namespace BombinoBomberBot.Telegram
         private readonly ILogger<TelegramBotUpdatesMiddleware> _logger;
         private readonly RequestDelegate _next;
 
-        public TelegramBotUpdatesMiddleware(IMediator mediator, ILogger<TelegramBotUpdatesMiddleware> logger, RequestDelegate next)
+        public TelegramBotUpdatesMiddleware(IMediator mediator, ILogger<TelegramBotUpdatesMiddleware> logger,
+            RequestDelegate next)
         {
             _mediator = mediator;
             _logger = logger;
@@ -27,15 +21,15 @@ namespace BombinoBomberBot.Telegram
 
         public async Task InvokeAsync(HttpContext context)
         {
-
             var reader = new StreamReader(context.Request.Body);
             var body = await reader.ReadToEndAsync();
 
+            var scope = new Dictionary<string, string>
+            {
+                { "RemoveIp", context.Connection.RemoteIpAddress.ToString() },
+                { "Path", context.Request.Path }
+            };
 
-            var scope = new Dictionary<string, string>();
-            scope.Add("RemoveIp", context.Connection.RemoteIpAddress.ToString());            
-            scope.Add("Path", context.Request.Path);
-            
             foreach (var header in context.Request.Headers)
             {
                 scope.Add($"Header.{header.Key}", header.Value.ToString());
@@ -43,7 +37,6 @@ namespace BombinoBomberBot.Telegram
 
             using (_logger.BeginScope(scope))
             {
-
                 try
                 {
                     var update = JsonConvert.DeserializeObject<Update>(body);

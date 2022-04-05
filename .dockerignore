@@ -8,3 +8,16 @@ docker-compose.yml
 docker-compose.*.yml
 */bin
 */obj
+
+# directories
+**/bin/
+**/obj/
+**/out/
+
+# files
+Dockerfile*
+**/*.trx
+**/*.md
+**/*.ps1
+**/*.cmd
+**/*.sh

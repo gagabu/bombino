@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Telegram.Bot;
+﻿using Telegram.Bot;
 
 namespace BombinoBomberBot.Telegram
 {
@@ -13,20 +11,11 @@ namespace BombinoBomberBot.Telegram
             _applicationBuilder = app;
         }
 
-        public TelegramBotBuilder WithPolling()
-        {
-            _applicationBuilder.ApplicationServices.GetService<TelegramBotPolling>().Start();
-            _applicationBuilder.ApplicationServices.GetService<TelegramBotClient>().DeleteWebhookAsync().Wait();
-            return this;
-        }
-
-        public TelegramBotBuilder WithWebHooks(string callback)
+        public void WithWebHooks(string callback)
         {
             _applicationBuilder.Map("/updates", x => { x.UseMiddleware<TelegramBotUpdatesMiddleware>(); });
 
-            _applicationBuilder.ApplicationServices.GetService<TelegramBotClient>().SetWebhookAsync(callback).Wait();
-
-            return this;
+            _applicationBuilder.ApplicationServices.GetRequiredService<TelegramBotClient>().SetWebhookAsync(callback).Wait();
         }
     }
 }

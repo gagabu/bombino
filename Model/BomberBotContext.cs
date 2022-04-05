@@ -91,7 +91,7 @@ namespace BombinoBomberBot.Model
 
         public int Id { get; set; }
 
-        public int TelegramUserId { get; set; }
+        public long TelegramUserId { get; set; }
 
         public IList<RoomUser> Rooms { get; set; }
 
